@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  顶层聚合父工程：统一版本，集中 dependencyManagement。
+  使用 Spring Boot 2.6.11（保持你原始选择），并引入 Spring Cloud Jubilee 2021.0.9 + Spring Cloud Alibaba 2021.0.5.0 BOM。
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Use Spring Boot parent for plugin + dependency management baseline -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.6.11</version>
+        <relativePath/> <!-- lookup from repository -->
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>shop-parent-65</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <!-- 聚合子模块 -->
+    <modules>
+        <module>shop-product-api</module>
+        <module>shop-product-server</module>
+        <module>shop-order-api</module>
+        <module>shop-order-server</module>
+        <module>shop-api-gateway</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- 三方库版本（必要时可在此集中升级） -->
+        <mybatis-plus.version>3.3.2</mybatis-plus.version><!-- 先保持你当前代码兼容的版本 -->
+    </properties>
+
+    <!-- 统一管理 Spring Cloud & Spring Cloud Alibaba 版本 -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud Jubilee 最新 SR（2021.0.9） -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>2021.0.9</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Spring Cloud Alibaba（Sentinel / Nacos / etc） -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2021.0.5.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- 父级通用依赖（所有子模块默认可用；根据需要精简） -->
+    <dependencies>
+        <!-- Lombok（编译期） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- 测试基座 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Spring Boot打包插件 -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

@@ -1,0 +1,24 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: product
+  datasource:
+    # 推荐 MySQL8+ 用 com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.jdbc.Driver
+    # 加上 serverTimezone 避免时区警告
+    url: jdbc:mysql://localhost:3307/cloud65?useSSL=false&useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+  cloud:
+    nacos:
+      discovery:
+        # 注意冒号后要空格，且放在 spring.cloud 下
+        server-addr: localhost:8848
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+

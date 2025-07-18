@@ -28,3 +28,5 @@ server:
 feign:
   sentinel:
     enabled: true
+  zipkin:
+    discovery-client-enabled: false

@@ -4,6 +4,8 @@ import com.example.entity.TShopOrder;
 import com.example.entity.TShopProduct;
 import com.example.feign.ProductFeignApi;
 import com.example.service.ITShopOrderService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
@@ -26,6 +28,7 @@ import java.util.Random;
  * 教学故意留坑：真正请求时仍写死 localhost:8091，
  * 让你体会 Connection refused 的错误。
  */
+@Slf4j
 @RestController
 @RequestMapping("/order")
 public class TShopOrderController {
@@ -43,7 +46,7 @@ public class TShopOrderController {
      */
     @RequestMapping("/save")
     public TShopOrder save(Long uid, Long pid, Integer num) {
-
+        log.info("调用orderController的save方法");
         /* ========== 步骤①：从注册中心拉取 product 实例列表 ========== */
         // 可能返回 0~N 个实例；productList.size() == 0 时会埋下边界问题
         List<ServiceInstance> productList = discoveryClient.getInstances("product");
@@ -67,7 +70,7 @@ public class TShopOrderController {
         //    若商品服务并未监听 8091 → Connection refused。
         RestTemplate restTemplate = new RestTemplate();
         TShopProduct product = restTemplate.getForObject(
-                "http://localhost:" + port + "/Product/" + pid,     // TODO: 正确写法应改成 "http://localhost:" + port + "/product/" + pid
+                "http://localhost:" + port + "/product/" + pid,     // TODO: 正确写法应改成 "http://localhost:" + port + "/product/" + pid
                 TShopProduct.class
         );
 

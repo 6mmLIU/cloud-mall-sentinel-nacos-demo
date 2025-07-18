@@ -19,11 +19,17 @@ spring:
             - Path=/p/**
           filters:
             - StripPrefix=1
+            - Time=true
         - id: order_route
           uri: lb://order
           predicates:
             - Path=/o/**
           filters:
             - StripPrefix=1
+            - Abc=1,2,hello,true,123
+    sentinel:
+      transport:
+        dashboard: localhost:8858
+        port: 9999
   redis:
     password: ''
